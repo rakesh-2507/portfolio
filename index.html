@@ -29,27 +29,6 @@
   <!-- Main CSS File -->
   <link href="assets/css/main.css" rel="stylesheet">
   <style>
-    .popup {
-      display: none;
-      position: relative;
-      transform: translate(-50%, -50%);
-      background: rgba(0, 0, 0, 0.8);
-      padding: 4px;
-      border-radius: 11px;
-      color: white;
-      text-align: center;
-      z-index: 1000;
-      WIDTH: 30%;
-      left: 60%;
-    }
-
-    @media screen and (min-width:250px) and (max-width:490px) {
-      .popup {
-        WIDTH: 90%;
-        left: 49%;
-      }
-    }
-
     .popup-content {
       background: white;
       padding: 20px;
@@ -610,29 +589,24 @@
           </div>
 
           <div class="col-lg-8">
-            <form id="contactForm" name="contact" method="POST" data-netlify="true" data-netlify-honeypot="bot-field">
-
-              <!-- Hidden Fields -->
-              <input type="hidden" name="form-name" value="contact">
-              <p style="display: none;">
-                <label>Don’t fill this out: <input name="bot-field"></label>
-              </p>
+            <form id="contactForm" name="contact">
 
               <div class="row gy-4">
                 <div class="col-md-6">
-                  <input type="text" name="name" class="form-control" placeholder="Your Name" required>
+                  <input type="text" name="name" id="name" class="form-control" placeholder="Your Name" required>
                 </div>
 
                 <div class="col-md-6">
-                  <input type="email" class="form-control" name="email" placeholder="Your Email" required>
+                  <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required>
                 </div>
 
                 <div class="col-md-12">
-                  <input type="text" class="form-control" name="subject" placeholder="Subject" required>
+                  <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required>
                 </div>
 
                 <div class="col-md-12">
-                  <textarea class="form-control" name="message" rows="6" placeholder="Message" required></textarea>
+                  <textarea class="form-control" name="message" id="message" rows="6" placeholder="Message"
+                    required></textarea>
                 </div>
 
                 <div class="col-md-12 text-center">
@@ -640,6 +614,10 @@
                 </div>
               </div>
             </form>
+            <p id="thankYouMessage"
+              style="display: none; color: green; font-weight: bold; text-align: center; margin-top: 10px;">
+              You Just Need One More Click.Thank You!
+            </p>
           </div>
         </div>
 
@@ -688,6 +666,40 @@
 
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
+
+  <script>
+    document.getElementById("contactForm").onsubmit = function (event) {
+      event.preventDefault(); // Stop default form submission
+
+      // Get form values
+      let name = document.getElementById("name").value;
+      let email = document.getElementById("email").value;
+      let subject = document.getElementById("subject").value;
+      let message = document.getElementById("message").value;
+
+      // Format the message for WhatsApp
+      let whatsappMessage = `Hello, I am ${name}%0AEmail: ${email}%0ASubject: ${subject}%0AMessage: ${message}`;
+
+      // Replace with your WhatsApp number (without + sign)
+      let phoneNumber = "919848818534"; // Example: India (+91)
+
+      // WhatsApp URL
+      let whatsappURL = `https://wa.me/${phoneNumber}?text=${whatsappMessage}`;
+
+      // Show Thank You message
+      document.getElementById("thankYouMessage").style.display = "block";
+
+      // Open WhatsApp in a new tab
+      setTimeout(() => {
+        window.open(whatsappURL, "_blank");
+
+        // Wait 3 seconds after opening WhatsApp, then refresh the page
+        setTimeout(() => {
+          location.reload();
+        }, 3000);
+      }, 2000);
+    };
+  </script>
 
 </body>
 
